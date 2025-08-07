@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import myContext  from './myContext'  
-import { collection, onSnapshot, query,  Timestamp ,orderBy,addDoc, setDoc, doc, Firestore} from 'firebase/firestore';
+import { collection, onSnapshot, query, Timestamp, orderBy, addDoc, setDoc, doc, deleteDoc, getDocs } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 import { fireDB } from '../../firebase/FirebaseConfig';
-import { deleteDoc } from 'firebase/firestore';
 
 
 
@@ -119,7 +118,7 @@ function myState (props) {
         QuerySnapshot.forEach((doc) => {
           productArray.push({ ...doc.data(), id: doc.id });
         });
-        console.log("Products loaded:", productArray);
+        console.log(`Products loaded: ${productArray.length} items`);
         setProduct(productArray);
         setLoading(false);
       });

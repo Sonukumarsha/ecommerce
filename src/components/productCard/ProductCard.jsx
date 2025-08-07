@@ -13,7 +13,7 @@ function ProductCard() {
     const dispatch = useDispatch()
     const cartItems = useSelector((state) => state.cart)
     const navigate = useNavigate()
-    console.log(cartItems)
+    // Removed console.log for cleaner console output
 
     // add to cart
     const addCart = (product) => {

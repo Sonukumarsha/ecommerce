@@ -141,7 +141,7 @@ function Cart() {
             }
           ),
           email: JSON.parse(localStorage.getItem('user'))?.email || '',
-          userId: JSON.parse(localStorage.getItem('user'))?._id || '',
+          userId: JSON.parse(localStorage.getItem('user'))?._id || JSON.parse(localStorage.getItem('user'))?.user?.uid || JSON.parse(localStorage.getItem('user'))?.uid || '',
         }
 
         try {

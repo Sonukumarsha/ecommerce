@@ -10,12 +10,12 @@ function Home  () {
   const dispatch = useDispatch()
   const cartItem = useSelector((state) => state.cart)
 
-  console.log("Cart items", cartItem)
+  // Removed console logs for cleaner console output
   
 
-  useEffect(() => {
-    console.log("Cart update:", cartItem);
-  }, [cartItem]); 
+  // useEffect(() => {
+  //   console.log("Cart update:", cartItem);
+  // }, [cartItem]); 
 
   const addCart = ()=>{
     dispatch(addToCart("shirt"));
