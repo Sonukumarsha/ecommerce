@@ -51,7 +51,42 @@ function Cart() {
   const [phoneNumber, setPhoneNumber] = useState("")
   const [address, setAddress] = useState("")
 
+  // Function to load Razorpay script dynamically
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      if (typeof window.Razorpay !== 'undefined') {
+        resolve(true);
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        resolve(false);
+      };
+      document.head.appendChild(script);
+    });
+  };
+
   const buyNow = async () => {
+    // Load Razorpay script if not already loaded
+    const isRazorpayLoaded = await loadRazorpayScript();
+    if (!isRazorpayLoaded) {
+      return toast.error("Payment service failed to load. Please check your internet connection and try again.", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored"
+      });
+    }
+
     // Check if cart is empty
     if (cartItems.length === 0) {
       return toast.error("Your cart is empty", {

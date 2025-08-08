@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, use } from 'react'
 import myContext  from './myContext'  
 import { collection, onSnapshot, query, Timestamp, orderBy, addDoc, setDoc, doc, deleteDoc, getDocs } from 'firebase/firestore';
 import { toast } from 'react-toastify';
@@ -118,8 +118,10 @@ function myState (props) {
         QuerySnapshot.forEach((doc) => {
           productArray.push({ ...doc.data(), id: doc.id });
         });
-        console.log(`Products loaded: ${productArray.length} items`);
         setProduct(productArray);
+        setLoading(false);
+      }, (error) => {
+        console.error("Error in products onSnapshot:", error);
         setLoading(false);
       });
       
@@ -130,22 +132,6 @@ function myState (props) {
       setLoading(false);
     }
   }
-  useEffect(() => {
-    let unsubscribe;
-    
-    const fetchProducts = async () => {
-      unsubscribe = await getProductData();
-    };
-    
-    fetchProducts();
-
-    // Cleanup function to unsubscribe from the listener
-    return () => {
-      if (unsubscribe && typeof unsubscribe === 'function') {
-        unsubscribe();
-      }
-    };
-  }, []);
 
 
   const edithandle = (item) => {
@@ -222,29 +208,58 @@ function myState (props) {
       const result = await getDocs(collection(fireDB, 'order'));
       const orderArray = [];
       result.forEach((doc) => {
-        orderArray.push(doc.data());
-        setLoading(false);
+        orderArray.push({ ...doc.data(), id: doc.id });
       });
       setOrder(orderArray);
-      console.log(" orderArray")
       setLoading(false);
     } catch (error) {
-      console.log( error);
+      console.log("Error fetching orders:", error);
       setLoading(false);
     }
   };
+
+  const getUserData = async () => {
+    setLoading(true);
+
+    try {
+      const result = await getDocs(collection(fireDB, 'user'));
+      const userArray = [];
+      result.forEach((doc) => {
+        userArray.push({ ...doc.data(), id: doc.id });
+      });
+      setUser(userArray);
+      setLoading(false);
+    } catch (error) {
+      console.log("Error fetching users:", error);
+      setLoading(false);
+    }
+  }
+
+  // Single useEffect for initial data loading
   useEffect(() => {
-    getProductData();
-    getOrderData();
+    let unsubscribeProducts;
+    
+    const fetchAllData = async () => {
+      // Fetch products with real-time listener
+      unsubscribeProducts = await getProductData();
+      
+      // Fetch orders and users
+      await getOrderData();
+      await getUserData();
+    };
+    
+    fetchAllData();
+
+    // Cleanup function to unsubscribe from the listener
+    return () => {
+      if (unsubscribeProducts && typeof unsubscribeProducts === 'function') {
+        unsubscribeProducts();
+      }
+    };
   }, []);
 
-
-
-
-
-
   return (
-    <myContext.Provider value={{ mode, toggleMode, loading, setLoading, user, setUser, logout, isAdmin, Products, setProducts, addProduct, product, edithandle, updateProduct, deleteProduct, editingProductId, clearForm, order, setOrder }}
+    <myContext.Provider value={{ mode, toggleMode, loading, setLoading, user, setUser, logout, isAdmin, Products, setProducts, addProduct, product, edithandle, updateProduct, deleteProduct, editingProductId, clearForm, order, setOrder, getUserData, getOrderData }}
     >
       {props.children}
     </myContext.Provider>

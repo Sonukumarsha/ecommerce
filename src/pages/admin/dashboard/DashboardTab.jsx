@@ -6,13 +6,15 @@ import { FaUser, FaCartPlus } from "react-icons/fa";
 import { AiFillShopping, AiFillPlusCircle, AiFillDelete } from "react-icons/ai";
 import { Link, Navigate } from "react-router-dom";
 
+
 function DashboardTab() {
   const context = useContext(myContext);
-  const { mode, product, edithandle, deleteProduct, order } = context;
+  const { mode, product, edithandle, deleteProduct, order, user } = context;
   let [isOpen, setIsOpen] = useState(false);
 
   console.log("Dashboard - Products:", product);
   console.log("Dashboard - Orders:", order);
+
 
   function closeModal() {
     setIsOpen(false);
@@ -155,8 +157,11 @@ function DashboardTab() {
                               >
                                 <img
                                   className="w-16"
-                                  src={imageUrl}
-                                  alt="img"
+                                  src={imageUrl || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtc2l6ZT0iMTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj4zMDB4MzAwPC90ZXh0Pjwvc3ZnPg=='}
+                                  alt="Product Image"
+                                  onError={(e) => {
+                                    e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtc2l6ZT0iMTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5JbWFnZTwvdGV4dD48L3N2Zz4=';
+                                  }}
                                 />
                               </th>
                               <td
@@ -315,7 +320,7 @@ function DashboardTab() {
                               Phone Number
                             </th>
                             <th scope="col" className="px-6 py-3">
-                              Email
+                              {allorder.email}
                             </th>
                             <th scope="col" className="px-6 py-3">
                               Date
@@ -489,7 +494,10 @@ function DashboardTab() {
                       </th>
                     </tr>
                   </thead>
-                  <tbody>
+                {user && Array.isArray(user) ? user.map((item, index)=>{
+                  const {name, uid, email, data} = item;
+                  return(
+                     <tbody>
                     <tr
                       className="bg-gray-50 border-b  dark:border-gray-700"
                       style={{
@@ -501,7 +509,7 @@ function DashboardTab() {
                         className="px-6 py-4 text-black "
                         style={{ color: mode === "dark" ? "white" : "" }}
                       >
-                        1.
+                        {index + 1}
                       </td>
                       <td
                         className="px-6 py-4 text-black "
@@ -541,6 +549,8 @@ function DashboardTab() {
                       </td>
                     </tr>
                   </tbody>
+                  )
+                }) : <tbody><tr><td colSpan="4" className="text-center py-4">No users found</td></tr></tbody>}
                 </table>
               </div>
             </TabPanel>
