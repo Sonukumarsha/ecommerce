@@ -13,12 +13,21 @@ function myState (props) {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(null);
   const [editingProductId, setEditingProductId] = useState(null);
+  const [isContextLoaded, setIsContextLoaded] = useState(false);
 
   useEffect(() => {
     // Check if user is logged in
-    const userData = localStorage.getItem('user');
-    if (userData) {
-      setUser(JSON.parse(userData));
+    try {
+      const userData = localStorage.getItem('user');
+      if (userData) {
+        const parsedUser = JSON.parse(userData);
+        setUser(parsedUser);
+      }
+    } catch (error) {
+      console.error("Error loading user from localStorage:", error);
+      localStorage.removeItem('user'); // Clear corrupted data
+    } finally {
+      setIsContextLoaded(true);
     }
   }, []);
 
@@ -39,7 +48,10 @@ function myState (props) {
   };
 
   const isAdmin = () => {
-    return user && user.user && user.user.email === "kumar@gmail.com";
+    if(user && user.user && user.user.email === "kumar@gmail.com"){
+      return true;
+    }
+    return false;
   };
 
 
@@ -259,7 +271,7 @@ function myState (props) {
   }, []);
 
   return (
-    <myContext.Provider value={{ mode, toggleMode, loading, setLoading, user, setUser, logout, isAdmin, Products, setProducts, addProduct, product, edithandle, updateProduct, deleteProduct, editingProductId, clearForm, order, setOrder, getUserData, getOrderData }}
+    <myContext.Provider value={{ mode, toggleMode, loading, setLoading, user, setUser, logout, isAdmin, Products, setProducts, addProduct, product, edithandle, updateProduct, deleteProduct, editingProductId, clearForm, order, setOrder, getUserData, getOrderData, isContextLoaded }}
     >
       {props.children}
     </myContext.Provider>

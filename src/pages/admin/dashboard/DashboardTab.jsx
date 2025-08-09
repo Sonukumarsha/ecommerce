@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import myContext from "../../../context/data/myContext";
 import { MdOutlineProductionQuantityLimits } from "react-icons/md";
@@ -157,10 +157,10 @@ function DashboardTab() {
                               >
                                 <img
                                   className="w-16"
-                                  src={imageUrl || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtc2l6ZT0iMTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj4zMDB4MzAwPC90ZXh0Pjwvc3ZnPg=='}
+                                  src={imageUrl || 'data:image/jpeg;base64,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'}
                                   alt="Product Image"
                                   onError={(e) => {
-                                    e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtc2l6ZT0iMTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5JbWFnZTwvdGV4dD48L3N2Zz4=';
+                                    e.target.src = 'data:image/jpeg;base64,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';
                                   }}
                                 />
                               </th>
@@ -275,7 +275,7 @@ function DashboardTab() {
                 >
                   Order Details
                 </h1>
-
+                {/* *** THE ONLY CORRECTION IS HERE *** */}
                 {order && order.length > 0 ? (
                   order.map((allorder, index) => {
                     return (
@@ -329,10 +329,12 @@ function DashboardTab() {
                         </thead>
                         <tbody>
                           {allorder.cartItems &&
-                            allorder.cartItems.map((item, itemIndex) => {
+                            allorder.cartItems.map((item, Index) => {
+                              //console.log(allorder);
+                              const {title, description, imageUrl, price, category} = item;
                               return (
                                 <tr
-                                  key={itemIndex}
+                                  key={Index}
                                   className="bg-gray-50 border-b dark:border-gray-700"
                                   style={{
                                     backgroundColor:
@@ -450,6 +452,7 @@ function DashboardTab() {
                     </p>
                   </div>
                 )}
+                {/* *** END OF CORRECTION *** */}
               </div>
             </TabPanel>
             <TabPanel>

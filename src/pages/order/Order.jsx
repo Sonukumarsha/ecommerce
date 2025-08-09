@@ -18,18 +18,18 @@ function Order() {
   const context = useContext(myContext)
   const { mode, loading, order } = context
 
-  console.log('Current user ID:', userid);
-  console.log('Available orders:', order);
-  console.log('User data:', user);
-
-  // Filter orders for current user
+  // Filter orders for current user with better error handling
   const userOrders = order?.filter(obj => {
-    const matches = obj.userId === userid || obj.userid === userid;
-    console.log('Order check - Order userId:', obj.userId, 'Current user:', userid, 'Matches:', matches);
+    // Handle cases where userId might be undefined or null
+    const orderUserId = obj.userId || obj.userid;
+    const matches = orderUserId && orderUserId === userid;
+    
+    if (!orderUserId) {
+      console.warn('Order found without userId:', obj);
+    }
+    
     return matches;
   }) || [];
-
-  console.log('Filtered user orders:', userOrders);
 
   return (
     <Layout>

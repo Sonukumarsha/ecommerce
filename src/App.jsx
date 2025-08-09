@@ -71,15 +71,38 @@ export const ProtectedRoute = ({children}) => {
 
 // admin
 export const ProtectedRouteForAdmin = ({children}) => {
+  // Add a small loading delay to ensure localStorage is properly read
+  const [isChecking, setIsChecking] = React.useState(true);
+  
+  React.useEffect(() => {
+    // Small delay to ensure proper loading
+    const timer = setTimeout(() => {
+      setIsChecking(false);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
+  
+  if (isChecking) {
+    return <div className="flex justify-center items-center h-screen">
+      <div className="text-xl">Loading...</div>
+    </div>;
+  }
+  
   const admin = localStorage.getItem('user');
-  if(admin){
-    const adminData = JSON.parse(admin);
-    if(adminData.user && adminData.user.email === "kumar@gmail.com"){
-      return children
-    }else{
-      return <Navigate to={"/login"}/>
+  
+  if (admin) {
+    try {
+      const adminData = JSON.parse(admin);
+      if (adminData.user && adminData.user.email === "kumar@gmail.com") {
+        return children;
+      } else {
+        return <Navigate to={"/login"}/>;
+      }
+    } catch (error) {
+      console.error("Error parsing admin data:", error);
+      return <Navigate to={"/login"}/>;
     }
-  }else{
-    return <Navigate to={"/login"}/>
+  } else {
+    return <Navigate to={"/login"}/>;
   }
 }

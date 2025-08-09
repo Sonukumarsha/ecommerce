@@ -1,5 +1,4 @@
-import React from 'react'
-import { Fragment, useContext, useState } from 'react'
+import React, { useEffect, useState, Fragment, useContext } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { Link } from 'react-router-dom'
 import { BsFillCloudSunFill } from 'react-icons/bs'
@@ -9,10 +8,13 @@ import { RxCross2 } from 'react-icons/rx'
 import { useSelector } from 'react-redux'
 
 function Navbar() {
+  console.log("Checking Navbar component"); // This should run when component is created
+  
   const [open, setOpen] = useState(false)
 
   const context = useContext(myContext)
-  const { toggleMode, mode,  isAdmin } = context
+  const { toggleMode, mode } = context
+  const [admin, setAdmin] = useState(false)
 
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -25,6 +27,14 @@ function Navbar() {
 
   const cartItem = useSelector((state) => state.cart)
 
+  useEffect(() => {
+    if(user && user.user && user.user.email === "kumar@gmail.com"){
+      setAdmin(true);
+    }
+  }, [user])
+
+  console.log("Rendering Navbar component"); // This runs during render phase
+  
   return (
     <div className="bg-white sticky top-0 z-50  "  >
       {/* Mobile menu */}
@@ -73,7 +83,7 @@ function Navbar() {
                       Order
                     </Link>
                     
-                    {isAdmin() && (
+                    {admin && (
                       <Link to={'/dashboard'} className="-m-2 block p-2 font-medium text-gray-900" style={{ color: mode === 'dark' ? 'white' : '', }}>
                         Admin
                       </Link>
@@ -150,7 +160,7 @@ function Navbar() {
                   <Link to={'/order'} className="text-sm font-medium text-gray-700 " style={{ color: mode === 'dark' ? 'white' : '', }}>
                     Order
                   </Link>
-                  {isAdmin() && (
+                  {admin && (
                     <Link to={'/dashboard'} className="text-sm font-medium text-gray-700 " style={{ color: mode === 'dark' ? 'white' : '', }}>
                       Admin
                     </Link>

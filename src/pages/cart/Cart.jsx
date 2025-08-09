@@ -175,8 +175,8 @@ function Cart() {
               day: '2-digit',
             }
           ),
-          email: JSON.parse(localStorage.getItem('user'))?.email || '',
-          userId: JSON.parse(localStorage.getItem('user'))?._id || JSON.parse(localStorage.getItem('user'))?.user?.uid || JSON.parse(localStorage.getItem('user'))?.uid || '',
+          email: JSON.parse(localStorage.getItem('user'))?.user?.email || JSON.parse(localStorage.getItem('user'))?.email || '',
+          userId: JSON.parse(localStorage.getItem('user'))?.user?.uid || JSON.parse(localStorage.getItem('user'))?.uid || JSON.parse(localStorage.getItem('user'))?._id || '',
         }
 
         try {
