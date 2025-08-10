@@ -9,7 +9,7 @@ import { Link, Navigate } from "react-router-dom";
 
 function DashboardTab() {
   const context = useContext(myContext);
-  const { mode, product, edithandle, deleteProduct, order, user } = context;
+  const { mode, product, edithandle, deleteProduct, order, users } = context;
   let [isOpen, setIsOpen] = useState(false);
 
   console.log("Dashboard - Products:", product);
@@ -456,106 +456,65 @@ function DashboardTab() {
               </div>
             </TabPanel>
             <TabPanel>
-              {/* <User addressInfo={addressInfo} setAddressInfo={setAddressInfo} setLoading={setLoading} /> */}
-              <div className="relative overflow-x-auto mb-10">
-                <h1
-                  className=" text-center mb-5 text-3xl font-semibold underline"
-                  style={{ color: mode === "dark" ? "white" : "" }}
-                >
-                  User Details
-                </h1>
-                <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                  <thead
-                    className="text-xs text-black uppercase bg-gray-200 "
-                    style={{
-                      backgroundColor: mode === "dark" ? "rgb(46 49 55)" : "",
-                      color: mode === "dark" ? "white" : "",
-                    }}
-                  >
-                    <tr>
-                      <th scope="col" className="px-6 py-3">
-                        S.No
-                      </th>
+            
 
-                      <th scope="col" className="px-6 py-3">
-                        Name
-                      </th>
-                      <th scope="col" className="px-6 py-3">
-                        Address
-                      </th>
-                      <th scope="col" className="px-6 py-3">
-                        Pincode
-                      </th>
-                      <th scope="col" className="px-6 py-3">
-                        Phone Number
-                      </th>
-                      <th scope="col" className="px-6 py-3">
-                        Email
-                      </th>
-                      <th scope="col" className="px-6 py-3">
-                        Date
-                      </th>
-                    </tr>
-                  </thead>
-                {user && Array.isArray(user) ? user.map((item, index)=>{
-                  const {name, uid, email, data} = item;
-                  return(
-                     <tbody>
-                    <tr
-                      className="bg-gray-50 border-b  dark:border-gray-700"
-                      style={{
-                        backgroundColor: mode === "dark" ? "rgb(46 49 55)" : "",
-                        color: mode === "dark" ? "white" : "",
-                      }}
-                    >
-                      <td
-                        className="px-6 py-4 text-black "
-                        style={{ color: mode === "dark" ? "white" : "" }}
-                      >
-                        {index + 1}
-                      </td>
-                      <td
-                        className="px-6 py-4 text-black "
-                        style={{ color: mode === "dark" ? "white" : "" }}
-                      >
-                        Name
-                      </td>
-                      <td
-                        className="px-6 py-4 text-black "
-                        style={{ color: mode === "dark" ? "white" : "" }}
-                      >
-                        Address
-                      </td>
-                      <td
-                        className="px-6 py-4 text-black "
-                        style={{ color: mode === "dark" ? "white" : "" }}
-                      >
-                        181919
-                      </td>
-                      <td
-                        className="px-6 py-4 text-black "
-                        style={{ color: mode === "dark" ? "white" : "" }}
-                      >
-                        1991818818
-                      </td>
-                      <td
-                        className="px-6 py-4 text-black "
-                        style={{ color: mode === "dark" ? "white" : "" }}
-                      >
-                        kkk@gmail.com
-                      </td>
-                      <td
-                        className="px-6 py-4 text-black "
-                        style={{ color: mode === "dark" ? "white" : "" }}
-                      >
-                        12 Aug 2019
-                      </td>
-                    </tr>
-                  </tbody>
-                  )
-                }) : <tbody><tr><td colSpan="4" className="text-center py-4">No users found</td></tr></tbody>}
-                </table>
-              </div>
+   {/* <User addressInfo={addressInfo} setAddressInfo={setAddressInfo} setLoading={setLoading} /> */}
+              <div className="relative overflow-x-auto mb-10">
+  <h1
+    className="text-center mb-5 text-3xl font-semibold underline"
+    style={{ color: mode === "dark" ? "white" : "" }}
+  >
+    User Details
+  </h1>
+
+  {users && Array.isArray(users) && users.length > 0 ? (
+    <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+      <thead
+        className="text-xs text-black uppercase bg-gray-200"
+        style={{
+          backgroundColor: mode === "dark" ? "rgb(46 49 55)" : "",
+          color: mode === "dark" ? "white" : "",
+        }}
+      >
+        <tr>
+          <th scope="col" className="px-6 py-3">S.No</th>
+          <th scope="col" className="px-6 py-3">Name</th>
+          <th scope="col" className="px-6 py-3">UID</th>
+          <th scope="col" className="px-6 py-3">Email</th>
+          <th scope="col" className="px-6 py-3">Date</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {users.map((item, index) => {
+          const { name, uid, email, date } = item;
+          return (
+            <tr
+              key={uid || index}
+              className="bg-gray-50 border-b dark:border-gray-700"
+              style={{
+                backgroundColor: mode === "dark" ? "rgb(46 49 55)" : "",
+                color: mode === "dark" ? "white" : "",
+              }}
+            >
+              <td className="px-6 py-4">{index + 1}</td>
+              <td className="px-6 py-4">{name}</td>
+              <td className="px-6 py-4">{uid}</td>
+              <td className="px-6 py-4">{email}</td>
+              <td className="px-6 py-4">{date}</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  ) : (
+    <div className="text-center py-4">
+      No users found
+    </div>
+  )}
+</div>
+
+               
             </TabPanel>
           </Tabs>
         </div>
@@ -565,3 +524,4 @@ function DashboardTab() {
 }
 
 export default DashboardTab;
+                        

@@ -270,8 +270,62 @@ function myState (props) {
     };
   }, []);
 
+
+  const [users, setUsers] = useState([])
+
+  const getUsersData = async () => {
+    setLoading(true);
+
+    try {
+      const result = await getDocs(collection(fireDB, 'users'));
+      const usersArray = [];
+      result.forEach((doc) => {
+        usersArray.push({
+          ...doc.data(),
+          id: doc.id
+        });
+      });
+      setUsers(usersArray); // Fixed: Now setting the users state instead of overwriting user state
+      console.log("Fetched users:", usersArray);
+      setLoading(false);
+    } catch (error) {
+      console.log("Error fetching users:", error);
+      setLoading(false);
+    }
+  }
+useEffect(() => {
+  getOrderData();
+    getUsersData();
+  }, []);
+
+
   return (
-    <myContext.Provider value={{ mode, toggleMode, loading, setLoading, user, setUser, logout, isAdmin, Products, setProducts, addProduct, product, edithandle, updateProduct, deleteProduct, editingProductId, clearForm, order, setOrder, getUserData, getOrderData, isContextLoaded }}
+    <myContext.Provider value={{ 
+      mode, 
+      toggleMode, 
+      loading, 
+      setLoading, 
+      user, 
+      setUser, 
+      logout, 
+      isAdmin, 
+      Products, 
+      setProducts, 
+      addProduct, 
+      product, 
+      edithandle, 
+      updateProduct, 
+      deleteProduct, 
+      editingProductId, 
+      clearForm, 
+      order, 
+      setOrder, 
+      getUserData, 
+      getOrderData, 
+      isContextLoaded,
+      users, // Added users to the context
+      getUsersData // Added getUsersData function to the context
+    }}
     >
       {props.children}
     </myContext.Provider>
