@@ -299,6 +299,13 @@ useEffect(() => {
   }, []);
 
 
+  const [searchKey, setSearchKey] = useState("");
+  const [filterType, setFilterType] = useState("");
+  const [filterPrice, setFilterPrice] = useState("");
+
+
+
+
   return (
     <myContext.Provider value={{ 
       mode, 
@@ -324,7 +331,13 @@ useEffect(() => {
       getOrderData, 
       isContextLoaded,
       users, // Added users to the context
-      getUsersData // Added getUsersData function to the context
+      getUsersData, // Added getUsersData function to the context
+      searchKey,
+      setSearchKey,
+      filterType,
+      setFilterType,
+      filterPrice,
+      setFilterPrice
     }}
     >
       {props.children}

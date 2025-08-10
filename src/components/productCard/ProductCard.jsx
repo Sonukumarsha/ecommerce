@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 
 function ProductCard() {
     const context = useContext(myContext)
-    const { mode, product } = context;
+    const { mode, product = [], searchKey = '', setSearchKey, filterType = '', setFilterType, filterPrice = '', setFilterPrice } = context;
 
     const dispatch = useDispatch()
     const cartItems = useSelector((state) => state.cart)
@@ -38,9 +38,17 @@ function ProductCard() {
                     <div className="h-1 w-20 bg-pink-600 rounded"></div>
                 </div>
 
+                {!product || product.length === 0 ? (
+                    <div className="text-center py-10">
+                        <p className="text-xl text-gray-500" style={{ color: mode === 'dark' ? 'white' : '' }}>
+                            No products available at the moment. Please check back later.
+                        </p>
+                    </div>
+                ) : (
                 <div className="flex flex-wrap -m-4">
-                    {product.map((item, index) => {
-                        const { id, title, price, description, imageUrl } = item;
+                    {product && product.filter((obj) => obj.title?.toLowerCase().includes(searchKey || '')).filter
+                    ((obj)=> obj.category?.toLowerCase().includes(filterType || '')).map((item, index) => {
+                        const {title, price, description, imageUrl, id} = item
                         return (
                             <div key={id || index} className="p-4 md:w-1/4  drop-shadow-lg " >
                                 <div className="h-full border-2 hover:shadow-gray-100 hover:shadow-2xl transition-shadow duration-300 ease-in-out    border-gray-200 border-opacity-60 rounded-2xl overflow-hidden" style={{ backgroundColor: mode === 'dark' ? 'rgb(46 49 55)' : '', color: mode === 'dark' ? 'white' : '', }} >
@@ -74,6 +82,7 @@ function ProductCard() {
                         )
                     })}
                 </div>
+                )}
                 {/* <div className=" flex justify-center">
                                             <button onClick={()=>addCart()} type="button" className="focus:outline-none text-white bg-pink-600 hover:bg-pink-700 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm w-full  py-2">Add To Cart</button>
 
